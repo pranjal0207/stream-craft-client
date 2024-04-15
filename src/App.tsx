@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import styled, { ThemeProvider } from "styled-components";
 import Menu from "./components/Menu";
@@ -6,7 +7,7 @@ import { darkTheme, lightTheme } from "./utils/Theme";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import Video from "./components/Video";
-import SignIn from "./components/SignIn";
+import LoginPage from './pages/login';
 
 const Container = styled.div`
   display: flex;
@@ -19,6 +20,7 @@ const Main = styled.div`
 const Wrapper = styled.div`
   padding: 22px 96px;
 `;
+
 
 function App() {
   const [darkMode, setDarkMode] = useState(true);
@@ -34,7 +36,7 @@ function App() {
               <Routes>
                 <Route path="/">
                   <Route index element={<Home />} />
-                  <Route path="signin" element={<SignIn />} />
+                  <Route path="login" element={<LoginPage />} />
                   <Route path="video/:id" element={<Video />} />
                 </Route>
               </Routes>
@@ -43,6 +45,7 @@ function App() {
         </BrowserRouter>
       </Container>
     </ThemeProvider>
+
   );
 }
 

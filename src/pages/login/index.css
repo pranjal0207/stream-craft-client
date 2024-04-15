@@ -1,0 +1,62 @@
+/* src/index.css */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Use the full height of the viewport */
+    width: 100%;
+}
+
+.login-form {
+    width: 400px;  /* Adjust as needed depending on previous changes */
+    padding: 100px;
+    margin: auto;  /* Centers the form horizontally */
+    border: 2px solid grey;  /* Blue border, you can choose any color */
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  /* Subtle shadow for depth */
+    background-color: #ffffff;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.login-heading {
+    display: flex;
+    justify-content: center;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    width: 100%;
+    color: #D8000C;
+    background: #FFD2D2;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    text-align: center;
+}
