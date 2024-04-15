@@ -1,9 +1,11 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import {format} from "timeago.js";
 
 const Container = styled.div`
-  width: ${(props) => props.type !== "sm" && "300px"};
+  width: ${(props) => props.type !== "sm" && "360px"};
   margin-bottom: ${(props) => (props.type === "sm" ? "10px" : "45px")};
   cursor: pointer;
   display: ${(props) => props.type === "sm" && "flex"};
@@ -24,7 +26,7 @@ const Details = styled.div`
   flex: 1;
 `;
 
-const ChannelImage = styled.img`
+const ProfileImage = styled.img`
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -40,7 +42,7 @@ const Title = styled.h1`
   color: ${({ theme }) => theme.text};
 `;
 
-const ChannelName = styled.h2`
+const ProfileName = styled.h2`
   font-size: 14px;
   color: ${({ theme }) => theme.textSoft};
   margin: 9px 0px;
@@ -51,23 +53,33 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Card = ({ type }) => {
+const Card = ({ video }) => {
+  const [profile, setProfile] = useState({});
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const res = await axios.get(`/user/${video.userid}`);
+      setProfile(res.data);
+    };
+    fetchProfile();
+  }, [video.userId]);
+
   return (
-    <Link to="/video/test" style={{ textDecoration: "none" }}>
+    <Link to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
       <Container type={type}>
         <Image
           type={type}
-          src="https://i9.ytimg.com/vi_webp/k3Vfj-e1Ma4/mqdefault.webp?v=6277c159&sqp=CIjm8JUG&rs=AOn4CLDeKmf_vlMC1q9RBEZu-XQApzm6sA"
+          src={video.imgUrl}
         />
         <Details type={type}>
-          <ChannelImage
+          <ProfileImage
             type={type}
-            src="/user.png"
+            src={profile.img}
           />
           <Texts>
-            <Title>Video Title</Title>
-            <ChannelName>Stream Crafter</ChannelName>
-            <Info>470,152 views • 2 days ago</Info>
+            <Title>{video.title}</Title>
+            <ProfileName>{profile.name}</ProfileName>
+            <Info>{video.views} views • {format(video.createdAt)}</Info>
           </Texts>
         </Details>
       </Container>
