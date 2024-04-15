@@ -7,10 +7,13 @@ const LoginPage = () => {
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    const BASE_API = process.env.REACT_APP_BACKEND_BASE_API;
+    console.log(BASE_API)
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
             event.preventDefault()
-            const response = await axios.post('http://localhost:4001/api/login/', {
+            const response = await axios.post(`${BASE_API}/login/`, {
                 "email": email,
                 "password": password
             });
