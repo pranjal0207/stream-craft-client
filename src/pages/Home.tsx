@@ -8,14 +8,14 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
-const API_BASE = process.env.REACT_APP_API_BASE;
+const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
 const Home = () => {
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     const fetchVideos = async () => {
-      const res = await axios.get(`${API_BASE}/videos`);
+      const res = await axios.get(`${API_BASE}/video/getTopVideos?n=9`);
       setVideos(res.data);
     };
     fetchVideos();
