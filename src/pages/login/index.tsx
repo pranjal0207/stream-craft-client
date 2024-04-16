@@ -1,23 +1,38 @@
-import React, { useState } from 'react';
-import axios from 'axios';
 import "./index.css"
+
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import axios from 'axios';
+import { setLogin } from './reducer';
+import { StreamCraftState } from '../../store';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
+    const dispatch = useDispatch();
+
+    const user = useSelector((state: StreamCraftState) => state.loginreducer.user);
+    const token = useSelector((state: StreamCraftState) => state.loginreducer.token);
+
     const BASE_API = process.env.REACT_APP_BACKEND_BASE_API;
-    console.log(BASE_API)
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
-            event.preventDefault()
+            event.preventDefault();
+            
             const response = await axios.post(`${BASE_API}/login/`, {
                 "email": email,
                 "password": password
             });
-            console.log(response.data);
+
+            dispatch(
+                setLogin(response.data)
+            );
+
+            console.log(`after : ${user}  .....  ${token}`)
+
         } catch (error) {
             setErrorMessage("You may have entered the wrong email address or password or your account might be locked");
         }
