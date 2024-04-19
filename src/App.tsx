@@ -35,7 +35,7 @@ function App() {
             <Wrapper>
               <Routes>
                 <Route path="/">
-                  {/* <Route index element={<Home />} /> */}
+                  <Route path="signin" element={<LoginPage />} />
                   <Route index element={<Home type="latest" />} />
                   <Route path="sports" element={<Home type="sports" />} />
                   <Route path="gaming" element={<Home type="gaming" />} />
