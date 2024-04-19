@@ -15,8 +15,6 @@ const LoginPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
-    
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
