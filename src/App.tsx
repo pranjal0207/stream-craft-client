@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import Video from "./pages/Video";
 import LoginPage from './pages/login';
 import Profile from "./pages/UserProfile";
+import IndividualUserProfile from "./pages/IndividualUserProfile"
 
 const Container = styled.div`
   display: flex;
@@ -39,6 +40,7 @@ function App() {
                   <Route index element={<Home />} />
                   <Route path="login" element={<LoginPage />} />
                   <Route path="userprofile" element={<Profile />} />
+                  <Route path="userprofile/:id" element={<IndividualUserProfile />} />
                   <Route path="video/:id" element={<Video />} />
                 </Route>
               </Routes>
