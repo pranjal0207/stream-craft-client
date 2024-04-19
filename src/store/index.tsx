@@ -4,7 +4,7 @@ import { UserState } from "../pages/login/reducer";
 
 export interface StreamCraftState {
 	authReducer: {
-		user : UserState,
+		user : any,
 		token : string,
 		type : String
 	};

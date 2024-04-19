@@ -4,7 +4,9 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { StreamCraftState } from "../store";
+import { setLogout } from "../pages/login/reducer";
 // import Upload from "./Upload";
 
 const Container = styled.div`
@@ -78,7 +80,17 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const currentUser = useSelector((state: any) => state.user);
+  // const currentUser = useSelector((state: any) => state.user);
+  const dispatch = useDispatch()
+
+  const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+  const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
+
+  const signout =  () => {
+    dispatch(setLogout());
+  }
+
+  console.log("in navbar", currentUser.firstName);
   return (
     <>
       <Container>
@@ -90,12 +102,15 @@ const Navbar = () => {
             />
             <SearchOutlinedIcon onClick={()=>navigate(`/search?q=${query}`)}/>
           </Search>
-          {currentUser ? (
-            <User>
+          {currentUser && currentUser.firstName !== "" ? (
+            <><User>
               <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
               <Avatar src="user.png" />
-              {currentUser.username}
+              {currentUser.firstName}
             </User>
+                <Button onClick={signout}>
+                  SIGN Out
+                </Button></>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>
               <Button>
