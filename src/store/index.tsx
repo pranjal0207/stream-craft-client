@@ -1,17 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
-import loginReducer from '../pages/login/reducer'
-import { User } from "../Interface/UserInterface";
+import authReducer from '../pages/login/reducer';
+import { UserState } from "../pages/login/reducer";
 
 export interface StreamCraftState {
-	loginReducer: {
-		user : User,
-		token : string
+	authReducer: {
+		user : UserState,
+		token : string,
+		type : String
 	};
 }
 
 const store = configureStore({
 	reducer: {
-		loginReducer
+		authReducer
 	}
 });
 

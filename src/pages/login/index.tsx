@@ -11,9 +11,12 @@ const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [userType, setUserType] = useState('consumer');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
+    
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         try {
@@ -22,8 +25,7 @@ const LoginPage = () => {
             const response = await client.signIn({
                 "email": email,
                 "password": password
-            });
-
+            }, userType.toLowerCase());
             dispatch(setLogin(response));
             navigate("/");
         } catch (error) {
@@ -37,7 +39,19 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit}>
                 <h2 className='login-heading'>Login</h2>
                 {errorMessage && <div className="error-message">{errorMessage}</div>}
-                <div>
+                    <div className="user-type-selector">
+                            <label htmlFor="userType">User Type:</label>
+                            <select
+                                id="userType"
+                                value={userType}
+                                onChange={(e) => setUserType(e.target.value)}
+                                required
+                            >
+                                <option value="consumer">Consumer</option>
+                                <option value="uploader">Uploader</option>
+                            </select>
+                        </div>
+                    <div>
                     <label htmlFor="email">Email:</label>
                     <input
                         type="email"

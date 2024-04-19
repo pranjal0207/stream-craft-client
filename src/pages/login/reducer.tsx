@@ -1,23 +1,34 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { User } from "../../Interface/UserInterface";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { ConsumerUser } from "../../Interface/ConsumerUserInterface";
+import { UploaderUser } from "../../Interface/UploaderUserInterface";
 
-interface InitialState {
-  user : User,
-  token : string
+interface ConsumerState {
+  type: "consumer";
+  user: ConsumerUser;
+  token: string;
 }
 
-const initialState : InitialState = {
+interface UploaderState {
+  type: "uploader";
+  user: UploaderUser;
+  token: string;
+}
+
+export type UserState = ConsumerState | UploaderState;
+
+const initialState: UserState = {
+  type: "consumer",
   user: {
     user_id : "",
-    username : "",
     email: "",
     firstName: "",
     lastName: "",
     subscriptions: [],
     likedVideos : [],
     dislikedVideos :[],
-    viewHistory : []
-  }, 
+    viewHistory : [],
+    type:""
+  },
   token : "" 
 };
 
@@ -25,25 +36,25 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setLogin: (state : InitialState, action) => {
+    setLogin: (state : UserState, action: PayloadAction<UserState>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
-
-      console.log(state);
+      state.type = action.payload.type;
     },
     setLogout: (state) => {
       state.user = {
         user_id : "",
-        username : "",
         email: "",
         firstName: "",
         lastName: "",
         subscriptions: [],
         likedVideos : [],
         dislikedVideos :[],
-        viewHistory : []
+        viewHistory : [],
+        type:""
       };
-      state.token = "" 
+      state.token = "" ;
+      state.type = "consumer";
     }
   },
 });
