@@ -1,7 +1,7 @@
 import "./index.css"
 
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLogin } from './reducer';
 
