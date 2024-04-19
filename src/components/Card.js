@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {format} from "timeago.js";
 
+
 const Container = styled.div`
-  width: 360px;
+  width: 330px;
   margin-bottom: 45px;
   cursor: pointer;
-  display: flex;
   gap: 10px;
 `;
 
@@ -53,13 +53,18 @@ const Info = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
+const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
+
 const Card = ({ video }) => {
   const [profile, setProfile] = useState({});
-
+  const headers = {
+    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
+    'Content-Type': 'application/json'
+  };
   useEffect(() => {
     const fetchProfile = async () => {
-      const res = await axios.get(`/user/${video.uploaderId}`);
-      setProfile(res.data);
+      const res = await axios.get(`${API_BASE}/user/uploader/${video.uploaderId}`, { headers });
+      setProfile(res.data.user);
     };
     fetchProfile();
   }, [video.uploaderId]);
@@ -68,7 +73,8 @@ const Card = ({ video }) => {
     <Link to={`/video/${video.video_id}`} style={{ textDecoration: "none" }}>
       <Container>
         <Image
-          src={video.imgUrl} // need to add image url or thumbnail as an attribute
+          // need to add image url or thumbnail as an attribute
+          src="https://i9.ytimg.com/vi_webp/k3Vfj-e1Ma4/mqdefault.webp?v=6277c159&sqp=CIjm8JUG&rs=AOn4CLDeKmf_vlMC1q9RBEZu-XQApzm6sA"
         />
         <Details>
           <ProfileImage
@@ -76,7 +82,7 @@ const Card = ({ video }) => {
           />
           <Texts>
             <Title>{video.title}</Title>
-            <ProfileName>{profile.username}</ProfileName>
+            {profile && <ProfileName>{profile.firstName}</ProfileName>}
             <Info>{video.views} views • {format(video.uploadDate)}</Info>
           </Texts>
         </Details>

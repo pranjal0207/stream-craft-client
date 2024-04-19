@@ -69,26 +69,36 @@ const Menu = ({ darkMode, setDarkMode }: any) => {
         </Item>
         <Hr />
         <Title>Categories</Title>
-        <Item>
-          <SportsBasketballOutlinedIcon />
-          Sports
-        </Item>
-        <Item>
-          <SportsEsportsOutlinedIcon />
-          Gaming
-        </Item>
-        <Item>
-          <LibraryMusicOutlinedIcon />
-          Music
-        </Item>
-        <Item>
-          <MovieOutlinedIcon />
-          Movies
-        </Item>
-        <Item>
-          <ArticleOutlinedIcon />
-          News
-        </Item>
+        <Link to="sports" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <SportsBasketballOutlinedIcon />
+            Sports
+          </Item>
+        </Link>
+        <Link to="gaming" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <SportsEsportsOutlinedIcon />
+            Gaming
+          </Item>
+        </Link>
+        <Link to="music" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <LibraryMusicOutlinedIcon />
+            Music
+          </Item>
+        </Link>
+        <Link to="movies" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <MovieOutlinedIcon />
+            Movies
+          </Item>
+        </Link>
+        <Link to="news" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <ArticleOutlinedIcon />
+            News
+          </Item>
+        </Link>
         <Hr />
         <Item onClick={() => setDarkMode(!darkMode)}>
           <SettingsBrightnessOutlinedIcon />
