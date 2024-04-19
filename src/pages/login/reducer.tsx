@@ -28,6 +28,8 @@ export const authSlice = createSlice({
     setLogin: (state : InitialState, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+
+      console.log(state);
     },
     setLogout: (state) => {
       state.user = {

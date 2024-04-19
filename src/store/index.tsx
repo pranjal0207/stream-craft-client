@@ -3,9 +3,9 @@ import loginReducer from '../pages/login/reducer'
 import { User } from "../Interface/UserInterface";
 
 export interface StreamCraftState {
-	loginreducer: {
-		user : any,
-		token : any
+	loginReducer: {
+		user : User,
+		token : string
 	};
 }
 
