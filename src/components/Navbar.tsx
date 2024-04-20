@@ -6,7 +6,7 @@ import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { StreamCraftState } from "../store";
-import { setLogout } from "../pages/login/reducer";
+import { setLogout } from "../pages/SignIn/reducer";
 // import Upload from "./Upload";
 
 const Container = styled.div`
