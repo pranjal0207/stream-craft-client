@@ -1,6 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ConsumerUser } from "../../Interface/ConsumerUserInterface";
 import { UploaderUser } from "../../Interface/UploaderUserInterface";
+import { ModeratorUser } from "../../Interface/ModeratorUserInterface";
 
 interface ConsumerState {
   type: "consumer";
@@ -14,7 +15,13 @@ interface UploaderState {
   token: string;
 }
 
-export type UserState = ConsumerState | UploaderState;
+interface ModeratoState {
+  type: "moderator";
+  user: ModeratorUser;
+  token: string;
+}
+
+export type UserState = ConsumerState | UploaderState | ModeratoState;
 
 const initialState: UserState = {
   type: "consumer",
@@ -40,7 +47,7 @@ export const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       state.type = action.payload.type;
-      console.log({"state" : state.type});
+      console.log({"state" : state.user});
     },
     setLogout: (state) => {
       state.user = {

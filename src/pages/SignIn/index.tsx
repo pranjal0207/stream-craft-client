@@ -54,6 +54,7 @@ const AuthenticationPage = () => {
                                     >
                                         <option value="consumer">Consumer</option>
                                         <option value="uploader">Uploader</option>
+                                        <option value="moderator">Moderator</option>
                                     </select>
                                 </div>
                             <div>
