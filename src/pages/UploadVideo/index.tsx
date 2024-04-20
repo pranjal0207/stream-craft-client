@@ -1,14 +1,15 @@
 import "./index.css"; // Ensure the path is correct for CSS specific to UploadVideo
 
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import styled from "styled-components";
 
 import * as client from "./client"
 import { StreamCraftState } from "../../store";
-import styled from "styled-components";
+import { setLogout } from "../SignIn/reducer";
 
 const Button = styled.button`
   padding: 5px 15px;
@@ -33,7 +34,9 @@ const UploadVideo = () => {
 
     const currentUserToken = useSelector((state:StreamCraftState) => state.authReducer.token);
     const currentUserType = useSelector((state: StreamCraftState) => state.authReducer.type);
+
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -56,6 +59,11 @@ const UploadVideo = () => {
         } catch (error: any) {
             setErrorMessage(error.message || "An error occurred during the upload. Please try again.");
         }
+    };
+
+    const signin = async () => {
+        dispatch(setLogout());
+        navigate('/signin')
     };
   
     return (
@@ -118,7 +126,7 @@ const UploadVideo = () => {
                     {/* <h3> Signed In with email : {currentUser.email}</h3> */}
                     {/* <button type="submit">SIGN IN</button> */}
                     <Link to="/signin" style={{ textDecoration: "none" }}>
-                    <Button>
+                    <Button onClick={signin}>
                         <AccountCircleOutlinedIcon />
                         SIGN IN
                     </Button>
