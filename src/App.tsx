@@ -12,6 +12,7 @@ import IndividualUserProfile from "./pages/IndividualUserProfile"
 import AuthenticationPage from './pages/SignIn';
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
+import UploadVideo from "./pages/UploadVideo";
 
 
 const Container = styled.div`
@@ -46,6 +47,7 @@ function App() {
                   <Route path="userprofile/:id" element={<IndividualUserProfile />} />
                   <Route path="signin" element={<AuthenticationPage />} />
                   <Route path="register" element={<SignUp />} />
+                  <Route path="video/new_video" element={<UploadVideo/>} />
                   <Route index element={<Home type="latest" />} />
                   <Route path="sports" element={<Home type="sports" />} />
                   <Route path="gaming" element={<Home type="gaming" />} />
