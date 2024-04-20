@@ -100,17 +100,17 @@ const Navbar = () => {
               placeholder="Search"
               onChange={(e) => setQuery(e.target.value)}
             />
-            <SearchOutlinedIcon onClick={()=>navigate(`/search?q=${query}`)}/>
+            <SearchOutlinedIcon onClick={()=>navigate(`/search?search=${query}`)}/>
           </Search>
           {currentUser && currentUser.firstName !== "" ? (
-            <><User>
+            <User>
               <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
               <Avatar src="user.png" />
               {currentUser.firstName}
+              <Button onClick={signout}>
+                  SIGN OUT
+                </Button>
             </User>
-                <Button onClick={signout}>
-                  SIGN Out
-                </Button></>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>
               <Button>
