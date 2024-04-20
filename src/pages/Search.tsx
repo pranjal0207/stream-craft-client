@@ -1,18 +1,20 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
-import axios from "axios";
 import { Video } from "../Interface/VideoInterface";
+
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 10px;
 `;
-
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
-const Home = ({type}:any) => {
-  const [videos, setVideos] = useState<any[]>([])
+const Search = () => {
+  const [videos, setVideos] = useState([]);
+  const query = useLocation().search;
   const headers = {
     'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
     'Content-Type': 'application/json'
@@ -20,15 +22,11 @@ const Home = ({type}:any) => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      // const res = await axios.get(`${API_BASE}/video/${type}/getTopVideos?n=6`, { headers });
-      const res = await axios.get(`${API_BASE}/video/getTopVideos?n=6`, { headers });
-      setVideos(res.data.top_videos);
-
+      const res = await axios.get(`${API_BASE}/video/${query}`, { headers });
+      setVideos(res.data.videos);
     };
     fetchVideos();
-
-    
-  }, []);
+  }, [query]);
 
   return (
     <Container>
@@ -39,4 +37,4 @@ const Home = ({type}:any) => {
   );
 };
 
-export default Home;
+export default Search;

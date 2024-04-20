@@ -1,11 +1,12 @@
-export interface User {
+export interface UploaderUser {
     user_id : string;
     username : string;
     email: string;
     firstName: string;
     lastName: string;
-    subscriptions: Array<string>;
+    subscribers: Array<string>;
     likedVideos : Array<string>;
     dislikedVideos : Array<string>;
-    viewHistory : Array<string>;
+    uploadedVideos: Array<string>;
+    type: string;
 }
