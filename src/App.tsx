@@ -7,9 +7,12 @@ import { darkTheme, lightTheme } from "./utils/Theme";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Video from "./pages/Video";
+import Profile from "./pages/UserProfile";
+import IndividualUserProfile from "./pages/IndividualUserProfile"
 import AuthenticationPage from './pages/SignIn';
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
+
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +40,10 @@ function App() {
             <Wrapper>
               <Routes>
                 <Route path="/">
+
+                  <Route index element={<Home />} />
+                  <Route path="userprofile" element={<Profile />} />
+                  <Route path="userprofile/:id" element={<IndividualUserProfile />} />
                   <Route path="signin" element={<AuthenticationPage />} />
                   <Route path="register" element={<SignUp />} />
                   <Route index element={<Home type="latest" />} />

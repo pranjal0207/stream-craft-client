@@ -23,6 +23,7 @@ const Home = ({type}:any) => {
       // const res = await axios.get(`${API_BASE}/video/${type}/getTopVideos?n=6`, { headers });
       const res = await axios.get(`${API_BASE}/video/getTopVideos?n=6`, { headers });
       setVideos(res.data.top_videos);
+
     };
     fetchVideos();
 
