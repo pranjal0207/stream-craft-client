@@ -8,4 +8,6 @@ export interface ModeratorUser {
     type: string;
     likedVideos?:string;
     dislikedVideos?:string;
+    subscribers?: Array<string>;
+    subscriptions?: Array<string>;
 }
