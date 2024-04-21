@@ -7,13 +7,29 @@ import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Comments from "../components/Comments";
 import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { dislike, fetchSuccess, like, moderate } from '../pages/video/reducer';
 import { format } from "timeago.js";
 import { StreamCraftState } from "../store";
 import { UploaderUser } from "../Interface/UploaderUserInterface";
+import { VideoInterface } from "../Interface/VideoInterface";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import "./UploadVideo/index.css";
 
+const Button2 = styled.button`
+  padding: 5px 15px;
+  background-color: transparent;
+  border: 1px solid #3ea6ff;
+  color: #3ea6ff;
+  border-radius: 3px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center; // Vertically aligns the content in the center
+  justify-content: center; 
+  gap: 5px;
+`;
 const Container = styled.div`
   display: flex;
   gap: 24px;
@@ -117,10 +133,10 @@ const VideoFrame = styled.video`
 
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
-const Video = () => {
+const VideoPage = () => {
   const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
   const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
-  const currentVideo = useSelector((state: StreamCraftState) => state.videoReducer.currentVideo);
+  let currentVideo = useSelector((state: StreamCraftState) => state.videoReducer.currentVideo);
 
   const dispatch = useDispatch();
 
@@ -138,10 +154,9 @@ const Video = () => {
     uploadedVideos: [],
     type: ''
   });
-  // const headers = {
-  //   'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
-  //   'Content-Type': 'application/json'
-  // };
+
+  const navigate = useNavigate()
+
   const headers = {
     'Authorization': currentUserToken,
   };
@@ -150,7 +165,9 @@ const Video = () => {
       try {
         const videoRes = await axios.get(`${API_BASE}/video/getVideo/${videoId}`, { headers });
         const res = await axios.get(`${API_BASE}/user/uploader/${videoRes.data.message.uploaderId}`, { headers });
+        
         setUploaderProfile(res.data.user);
+
         dispatch(fetchSuccess(videoRes.data));
       } catch (err) {}
     };
@@ -159,23 +176,39 @@ const Video = () => {
 
   const handleLike = async () => {
     const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/like`, {}, {headers});
-    dispatch(like(res.data.video));
+
+    const message = {
+      "message":res.data.video,
+      "videoUrl": currentVideo.videoUrl
+    }
+
+    dispatch(like(message));
   };
+
   const handleDislike = async () => {
     const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/dislike`, {}, {headers});
-    dispatch(dislike(res.data.video));
+
+    const message = {
+      "message": res.data.video,
+      "videoUrl": currentVideo.videoUrl
+    } 
+
+    dispatch(dislike(message));
   };
 
   const flagVideo = async () => {
     const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/moderate`, {}, {headers});
-    console.log(res.data.message);
-    dispatch(moderate(res.data.message.moderate));
+
+    dispatch(moderate(res.data.message));
   };
 
-
+  const signin = async () => {
+    navigate("/signin");
+  }
 
   return (
-    <Container>
+    <>
+    {currentUserToken !== "" ? (<Container>
       {currentVideo && 
       <Content>
         <VideoWrapper>
@@ -216,7 +249,7 @@ const Video = () => {
               <Description>{currentVideo.message.description}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          {currentUser.type == 'consumer' &&
+          {currentUser.type == 'moderator' &&
           <Flag onClick={flagVideo}>
             {currentVideo.message.moderated ? "FLAGGED" : "FLAG"}
           </Flag>}
@@ -225,7 +258,23 @@ const Video = () => {
         <Comments currentVideo={currentVideo} />
       </Content>}
     </Container>
+      ) : (
+        <div className='upload-container'>
+        <div className="upload-form">
+            <h3> Please Sign-In to view this video</h3>
+            {/* <h3> Signed In with email : {currentUser.email}</h3> */}
+            {/* <button type="submit">SIGN IN</button> */}
+            <Link to="/signin" style={{ textDecoration: "none" }}>
+            <Button2 onClick={signin}>
+                <AccountCircleOutlinedIcon />
+                SIGN IN
+            </Button2>
+            </Link>
+        </div>
+    </div>
+    )}
+    </>
   );
 };
 
-export default Video;
+export default VideoPage;

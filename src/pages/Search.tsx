@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
-import { Video } from "../Interface/VideoInterface";
+import { VideoInterface } from "../Interface/VideoInterface";
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +30,7 @@ const Search = () => {
 
   return (
     <Container>
-      {videos && videos.map((video:Video) => (
+      {videos && videos.map((video:any) => (
         <Card key={video.video_id} video={video}/>
       ))}
     </Container>

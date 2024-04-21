@@ -3,6 +3,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { UploaderUser } from "../Interface/UploaderUserInterface";
+import { useSelector } from "react-redux";
+import { StreamCraftState } from "../store";
 
 const Container = styled.div`
   display: flex;
@@ -51,9 +53,19 @@ const Comment = ({ comment }: any) => {
     uploadedVideos: [],
     type: ''
   });
+
+  const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
+
+  const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+
+  const headers = {
+    'Authorization': currentUserToken,
+  };
+
+
   useEffect(() => {
     const fetchComment = async () => {
-      const res = await axios.get(`/users/find/${comment.userId}`);
+      const res = await axios.get(`${API_BASE}/user/consumer/${comment.userId}`, {headers});
       setUploaderProfile(res.data)
     };
     fetchComment();
@@ -66,7 +78,7 @@ const Comment = ({ comment }: any) => {
         <Name>
           {uploaderProfile.firstName}
         </Name>
-        <Text>{comment}</Text>
+        <Text>{comment.text}</Text>
       </Details>
     </Container>
   );

@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Card from "../components/Card";
 import axios from "axios";
-import { Video } from "../Interface/VideoInterface";
+import { VideoInterface } from "../Interface/VideoInterface";
+import { useSelector } from "react-redux";
+import { StreamCraftState } from "../store";
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
@@ -13,8 +15,11 @@ const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
 const Home = ({type}:any) => {
   const [videos, setVideos] = useState<any[]>([])
+
+  const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+
   const headers = {
-    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
+    'Authorization': currentUserToken,
     'Content-Type': 'application/json'
   };
 
@@ -26,13 +31,11 @@ const Home = ({type}:any) => {
 
     };
     fetchVideos();
-
-    
   }, []);
 
   return (
     <Container>
-      {videos && videos.map((video:Video) => (
+      {videos && videos.map((video:any) => (
         <Card key={video.video_id} video={video}/>
       ))}
     </Container>
