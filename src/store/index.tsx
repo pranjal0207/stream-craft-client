@@ -1,25 +1,33 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage'; // uses localStorage under the hood
 import { persistStore, persistReducer } from 'redux-persist';
-import authReducer, { UserState } from '../pages/SignIn/reducer'; // Ensure the correct path
+
+import authReducer, { UserState } from '../pages/SignIn/reducer';
+import videoReducer from '../pages/video/reducer';
 
 export interface StreamCraftState {
-    authReducer: UserState; // Ensure UserState is imported correctly
+    authReducer: UserState;
+    videoReducer: {
+		currentVideo: any,
+		loading: boolean,
+		error: boolean
+	};
 }
 
 const rootReducer = combineReducers({
-    authReducer // Combine reducers here
+    authReducer,
+    videoReducer 
 });
 
 const persistConfig = {
-    key: 'root', // The key for the persist
-    storage, // The storage method (localStorage)
-    whitelist: ['authReducer'] // Names of reducers you want to persist
+    key: 'root',
+    storage, 
+    whitelist: ['authReducer'] 
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-const store = configureStore({
+const store = configureStore({ 
     reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

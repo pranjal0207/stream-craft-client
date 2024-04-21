@@ -6,4 +6,6 @@ export interface ModeratorUser {
     moderatedVideos : Array<string>;
     reportedVideos : Array<string>;
     type: string;
+    likedVideos?:string;
+    dislikedVideos?:string;
 }
