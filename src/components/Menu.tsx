@@ -7,6 +7,7 @@ import SportsBasketballOutlinedIcon from "@mui/icons-material/SportsBasketballOu
 import MovieOutlinedIcon from "@mui/icons-material/MovieOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
+import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 
 const Container = styled.div`
@@ -63,10 +64,12 @@ const Menu = ({ darkMode, setDarkMode }: any) => {
             Stream Craft
           </Logo>
         </Link>
-        <Item>
-          <SubscriptionsOutlinedIcon />
-          Subscriptions
-        </Item>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HomeIcon />
+            Home
+          </Item>
+        </Link>
         <Hr />
         <Title>Categories</Title>
         <Link to="sports" style={{ textDecoration: "none", color: "inherit" }}>
