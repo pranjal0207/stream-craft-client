@@ -41,7 +41,6 @@ const Profile: React.FC = () => {
     const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
     const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
-    console.log('type',currentUser.user_id);
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
@@ -99,122 +98,36 @@ const Profile: React.FC = () => {
     const [uploadedvideos, setUploadedVideos] = useState<Video[]>([]);
     const [moderatedvideos, setModeratedVideos] = useState<Video[]>([]); 
 
-    useEffect(() => {
-      
-      const fetchWatchedVideos = async () => {
-      //   const res = await axios.get(`${API_BASE}/video/getVideo/e8374d16-63bf-4d11-9346-ad9e56a35be0`);
-      //   setVideos(res.data);
-  
-      const temp: Video[] = [{
-          // message: {
-              _id: "66200e24a6f4d47aea08114f",
-              video_id: "e8374d16-63bf-4d11-9346-ad9e56a35be0",
-              title: "Sample",
-              description: "This is a sample video description",
-              uploadDate: "2024-04-17T18:00:04.547Z",
-              uploaderId: "4d5973dc-7ab2-419b-8ceb-88454466571a",
-              views: 0,
-              likes: 0,
-              dislikes: 0,
-              comments: [],
-              coordinates: [],
-              moderated: false,
-              __v: 0
-          // },
-          // videoUrl: "https://streamcraft-video-bucket.s3.amazonaws.com/..."
-      },
-      {
-          // message: {
-              _id: "66200e24a6f4d47aea081141",
-              video_id: "e8374d16-63bf-4d11-9346-ad9e56a35be0",
-              title: "Sample",
-              description: "This is a sample video description",
-              uploadDate: "2024-04-17T18:00:04.547Z",
-              uploaderId: "4d5973dc-7ab2-419b-8ceb-88454466571a",
-              views: 0,
-              likes: 0,
-              dislikes: 0,
-              comments: [],
-              coordinates: [],
-              moderated: false,
-              __v: 0
-          // },
-          // videoUrl: "https://streamcraft-video-bucket.s3.amazonaws.com/..."
-      },
-      {
-          // message: {
-              _id: "66200e24a6f4d47aea081145",
-              video_id: "e8374d16-63bf-4d11-9346-ad9e56a35be0",
-              title: "Sample",
-              description: "This is a sample video description",
-              uploadDate: "2024-04-17T18:00:04.547Z",
-              uploaderId: "4d5973dc-7ab2-419b-8ceb-88454466571a",
-              views: 0,
-              likes: 0,
-              dislikes: 0,
-              comments: [],
-              coordinates: [],
-              moderated: false,
-              __v: 0
-          // },
-          // videoUrl: "https://streamcraft-video-bucket.s3.amazonaws.com/..."
-      },
-      {
-          // message: {
-              _id: "66200e24a6f4d47aea081146",
-              video_id: "e8374d16-63bf-4d11-9346-ad9e56a35be0",
-              title: "Sample",
-              description: "This is a sample video description",
-              uploadDate: "2024-04-17T18:00:04.547Z",
-              uploaderId: "4d5973dc-7ab2-419b-8ceb-88454466571a",
-              views: 0,
-              likes: 0,
-              dislikes: 0,
-              comments: [],
-              coordinates: [],
-              moderated: false,
-              __v: 0
-          // },
-          // videoUrl: "https://streamcraft-video-bucket.s3.amazonaws.com/..."
-      },
-      {
-          // message: {
-              _id: "66200e24a6f4d47aea081142",
-              video_id: "e8374d16-63bf-4d11-9346-ad9e56a35be0",
-              title: "Sample",
-              description: "This is a sample video description",
-              uploadDate: "2024-04-17T18:00:04.547Z",
-              uploaderId: "4d5973dc-7ab2-419b-8ceb-88454466571a",
-              views: 0,
-              likes: 0,
-              dislikes: 0,
-              comments: [],
-              coordinates: [],
-              moderated: false,
-              __v: 0
-          // },
-          // videoUrl: "https://streamcraft-video-bucket.s3.amazonaws.com/..."
-      }];
-
-      setWatchedVideos(temp);
-      setModeratedVideos(temp);  // Replace with API call
-      // setUploadedVideos(temp);   // Replace with API call
-  
-      };
-      fetchWatchedVideos();
-    }, []);
-
     const fetchUploadedVideos = async () => {
       const res = await axios.get(`${API_BASE}/user/getUploaderVideos/${currentUser.user_id}`, { headers });
       console.log('uploaded videos',res.data);
       setUploadedVideos(res.data.videos);
     }
 
+    const fetchWatchedVideos = async () => {
+      const res = await axios.get(`${API_BASE}/user/getWatchedVideos/${currentUser.user_id}`, { headers });
+      console.log('watched videos',res.data.watchedVideos);
+      setWatchedVideos(res.data.watchedVideos);
+    }
+
+    const fetchModeratedVideos = async () => {
+      const res = await axios.get(`${API_BASE}/user/getModeratedVideos/${currentUser.user_id}`, { headers });
+      console.log('Moderated videos',res.data.moderatedVideos);
+      setModeratedVideos(res.data.moderatedVideos);
+    }
+
     // Fetch Uploader Videos
     useEffect(() => {
-      if (currentUser.type == 'uploader') {
+      if (currentUser.type === 'uploader') {
         fetchUploadedVideos();
       }
+      if (currentUser.type === 'consumer') {
+        fetchWatchedVideos();
+      }
+      if (currentUser.type === 'moderator') {
+        fetchModeratedVideos();
+      }
+
      }, []);
 
 
@@ -224,13 +137,11 @@ const Profile: React.FC = () => {
         console.log('Deleted video', videoId);
     
         // if (res.status === 200) {
-        //   setWatchedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
+        // if (currentUser.type === 'uploader') {
         //   setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
-        //   setModeratedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
         // }
-        if (currentUser.type == 'uploader') {
-          fetchUploadedVideos();
-        }
+        // }
+        
       } catch (error) {
         console.error('Failed to delete video', error);
       }
@@ -249,11 +160,14 @@ const Profile: React.FC = () => {
             showEditButton={true}
           />
           </SubContainer>
+
+          {watchedvideos.length > 0 && (
           <SubContainer>
             <h1>Watched Videos</h1>
             <ListVideos videos = {watchedvideos} onDelete={handleDeleteVideo} 
                         showDeleteButton = {false}></ListVideos>
           </SubContainer>
+          )}
           
           {uploadedvideos.length > 0 && (
             <SubContainer>
