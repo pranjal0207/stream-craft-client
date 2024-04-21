@@ -31,10 +31,9 @@ const TextDisplay = styled.div`
   margin-bottom: 10px;
 `;
 
-// Define the shape of the user data as a type to reuse
 type UserDataType = {
   name: string;
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -45,6 +44,8 @@ type ProfileDetailsProps = {
   toggleEditMode: () => void;
   handleChange: (field: keyof UserDataType, value: string) => void;
   handleSaveAll: () => void;
+  showPassword: boolean;  
+  showEditButton: boolean;  
 };
 
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({
@@ -52,12 +53,15 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   editMode,
   toggleEditMode,
   handleChange,
-  handleSaveAll
+  handleSaveAll,
+  showPassword,
+  showEditButton
 }) => {
   return (
     <>
       <h1>User Profile</h1>
-        {Object.keys(user).map((field) => (
+      {Object.keys(user).map((field) => (
+        (!showPassword && field === 'password') ? null : (
           <div key={field as keyof UserDataType}>
             {editMode ? (
               <>
@@ -72,14 +76,18 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
               <TextDisplay>{field}: {user[field as keyof UserDataType]}</TextDisplay>
             )}
           </div>
-        ))}
+        )
+      ))}
+       {showEditButton && (<>
         <Button onClick={toggleEditMode}>{editMode ? "Cancel Edit" : "Edit Profile"}</Button>
-      <Form onSubmit={(e) => {
+        <Form onSubmit={(e) => {
         e.preventDefault();
         handleSaveAll();
       }}>
         {editMode && <Button type="submit">Save All Changes</Button>}
       </Form>
+      </>
+      )}
     </>
   );
 };
