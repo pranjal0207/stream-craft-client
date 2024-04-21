@@ -3,11 +3,14 @@ import styled from "styled-components";
 import Card from "./Card";
 import axios from "axios";
 import { Video } from "../Interface/Video";
+import List from "./List";
 
 const Container = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 20px;
+  padding-right: 20px;
+  width: 100%;  // Make sure it occupies full width
 `;
 
 const LoadMoreButton = styled.button`
@@ -24,10 +27,12 @@ const LoadMoreButton = styled.button`
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
 interface Props {
-  videos: Video[]; 
+  videos: Video[],
+  onDelete: (videoId: string) => void,
+  showDeleteButton: boolean
 }
 
-const ListVideos: React.FC<Props> = ({videos}) => {
+const ListVideos: React.FC<Props> = ({ videos, onDelete, showDeleteButton }) => {
 
   const [displayCount, setDisplayCount] = useState(2);  
 
@@ -36,14 +41,10 @@ const ListVideos: React.FC<Props> = ({videos}) => {
     setDisplayCount(prevCount => prevCount + 2); 
   };
 
-
-  console.log(videos);
-
-
   return (
     <Container>
       {videos.slice(0, displayCount).map(video => (
-        <Card key={video.message._id} video={video} />
+        <List key={video._id} video={video} onDelete={onDelete} showDeleteButton={showDeleteButton}/>
       ))}
       {displayCount < videos.length && (
         <LoadMoreButton onClick={handleLoadMore}>Load More</LoadMoreButton>

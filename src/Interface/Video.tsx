@@ -1,5 +1,4 @@
 export interface Video {
-    message: {
         _id: string;
         video_id: string;
         title: string;
@@ -13,6 +12,4 @@ export interface Video {
         coordinates: any[];  
         moderated: boolean;
         __v: number;
-    };
-    videoUrl: string;
 }

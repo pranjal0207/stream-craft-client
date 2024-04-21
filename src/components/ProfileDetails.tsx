@@ -1,4 +1,3 @@
-// ProfileDetails.tsx
 import React from 'react';
 import styled from "styled-components";
 
@@ -42,12 +41,10 @@ type UserDataType = {
 // Props type definition
 type ProfileDetailsProps = {
   user: UserDataType;
-  editMode: {
-    [key in keyof UserDataType]: boolean;
-  };
-  toggleEditMode: (field: keyof UserDataType) => void;
+  editMode: boolean;
+  toggleEditMode: () => void;
   handleChange: (field: keyof UserDataType, value: string) => void;
-  handleSubmit: (field: keyof UserDataType, e: React.FormEvent<HTMLFormElement>) => void;
+  handleSaveAll: () => void;
 };
 
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({
@@ -55,32 +52,34 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   editMode,
   toggleEditMode,
   handleChange,
-  handleSubmit
+  handleSaveAll
 }) => {
   return (
     <>
       <h1>User Profile</h1>
-      {Object.keys(user).map((field) => (
-        <div key={field as keyof UserDataType}>
-          {editMode[field as keyof UserDataType] ? (
-            <Form onSubmit={(e) => handleSubmit(field as keyof UserDataType, e)}>
-              New {field}:
-              <Input
-                type={field === 'password' ? 'password' : 'text'}
-                value={user[field as keyof UserDataType]}
-                onChange={(e) => handleChange(field as keyof UserDataType, e.target.value)}
-              />
-              <Button type="submit">Save</Button>
-              <Button onClick={() => toggleEditMode(field as keyof UserDataType)} type="button">Cancel</Button>
-            </Form>
-          ) : (
-            <TextDisplay>
-              {field}: {user[field as keyof UserDataType]}
-              <Button onClick={() => toggleEditMode(field as keyof UserDataType)}>Edit</Button>
-            </TextDisplay>
-          )}
-        </div>
-      ))}
+        {Object.keys(user).map((field) => (
+          <div key={field as keyof UserDataType}>
+            {editMode ? (
+              <>
+                New {field}:
+                <Input
+                  type={field === 'password' ? 'password' : 'text'}
+                  value={user[field as keyof UserDataType]}
+                  onChange={(e) => handleChange(field as keyof UserDataType, e.target.value)}
+                />
+              </>
+            ) : (
+              <TextDisplay>{field}: {user[field as keyof UserDataType]}</TextDisplay>
+            )}
+          </div>
+        ))}
+        <Button onClick={toggleEditMode}>{editMode ? "Cancel Edit" : "Edit Profile"}</Button>
+      <Form onSubmit={(e) => {
+        e.preventDefault();
+        handleSaveAll();
+      }}>
+        {editMode && <Button type="submit">Save All Changes</Button>}
+      </Form>
     </>
   );
 };
