@@ -39,8 +39,6 @@ const SubscriptionsPage = () => {
         fetchSubscribers();
     }, [user_id]); 
 
-    console.log(user_id);
-
     return(
         <>
             <h1 className="heading"> {userName}'s Subscriptions</h1>

@@ -12,6 +12,5 @@ export const uploadVideo = async (video:any, token:string) => {
         }
     }
     const response = await axios.post(`${BASE_API}/video/newVideo`, video, config);
-    console.log(response.data)
     return video;
 }

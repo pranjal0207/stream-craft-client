@@ -10,15 +10,25 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
 
+
 const Container = styled.div`
   flex: 1;
   background-color: ${({ theme }) => theme.bgLighter};
   height: 100vh;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
-  position: sticky;
+  position: sticky; // Default position
   top: 0;
+
+  @media (max-width: 680px) {
+    position: static; // Non-sticky for screens less than 680px
+  }
+
+  @media (min-width: 681px) {
+    position: sticky; // Sticky position for screens greater than 680px
+  }
 `;
+
 const Wrapper = styled.div`
   padding: 18px 26px;
 `;
