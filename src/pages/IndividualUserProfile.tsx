@@ -104,7 +104,7 @@ const IndividualUserProfile: React.FC = () => {
 
     // Fetch Uploader Videos
     useEffect(() => {
-      if (currentUser.type == 'uploader') {
+      if (usertype == 'uploader') {
         fetchUploadedVideos();
       }
      }, []);
@@ -117,7 +117,7 @@ const IndividualUserProfile: React.FC = () => {
         // if (res.status === 200) {
         //   setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
         // }
-        if (currentUser.type == 'uploader') {
+        if (usertype == 'uploader') {
           fetchUploadedVideos();
         }
       } catch (error) {
