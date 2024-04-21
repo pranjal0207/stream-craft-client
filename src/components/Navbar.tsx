@@ -103,7 +103,7 @@ const Navbar = () => {
           </Search>
           {currentUser && currentUser.firstName !== "" ? (
             <User>
-              <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
+              <VideoCallOutlinedIcon onClick={() => navigate(`/video/new_video`)} />
               <Avatar src="user.png" />
               {currentUser.firstName}
               <Button onClick={signout}>
