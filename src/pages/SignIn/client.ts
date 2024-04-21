@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { setLogin } from './reducer';
 
 const BASE_API = process.env.REACT_APP_BACKEND_BASE_API;
 

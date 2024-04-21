@@ -3,7 +3,6 @@ import authReducer from '../pages/login/reducer';
 import { UserState } from "../pages/login/reducer";
 import videoReducer from '../pages/video/reducer';
 
-
 export interface StreamCraftState {
 	authReducer: {
 		user : any,
