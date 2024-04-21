@@ -44,7 +44,7 @@ function App() {
 
                   <Route index element={<Home />} />
                   <Route path="userprofile" element={<Profile />} />
-                  <Route path="userprofile/:userid" element={<IndividualUserProfile />} />
+                  <Route path="userprofile/:usertype/:userid" element={<IndividualUserProfile />} />
                   <Route path="signin" element={<AuthenticationPage />} />
                   <Route path="register" element={<SignUp />} />
                   <Route path="video/new_video" element={<UploadVideo/>} />

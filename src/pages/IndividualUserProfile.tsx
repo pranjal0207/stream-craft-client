@@ -37,14 +37,14 @@ type EditModeType = {
 
 const IndividualUserProfile: React.FC = () => {
 
-  const { userid } = useParams<{ userid: string }>();
+  const { userid, usertype } = useParams<{ userid: string; usertype: string }>();
+
   console.log(userid);
+  console.log(userid);
+  const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+  const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
-    console.log(userid);
-    const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
-    const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
-
-    const headers = {
+  const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
     };
@@ -53,6 +53,25 @@ const IndividualUserProfile: React.FC = () => {
     const [user, setUser] = useState<UserDataType>({ name: '', email: '', password: '' });
     const [editMode, setEditMode] = useState<boolean>(false); // Explicit boolean state
 
+    useEffect(() => {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`${API_BASE}/user/${usertype}/${userid}`
+          , { headers });
+         
+          const newUser: UserDataType = {
+            name: response.data.user.firstName + ' ' +response.data.user.lastName,
+            email: response.data.user.email,
+            password: "******",
+          };
+
+          setUser(newUser);
+        } catch (error) {
+          console.error('Failed to fetch user data', error);
+        }
+      };
+      fetchUserData();
+    }, []);
 
     const toggleEditMode = () => {
       setEditMode(prev => !prev);  // Correctly toggling boolean state
@@ -74,8 +93,6 @@ const IndividualUserProfile: React.FC = () => {
       }
     };
 
-    
-    
     // Uploaded Videos 
     const [uploadedvideos, setUploadedVideos] = useState<Video[]>([]);
    
@@ -118,6 +135,8 @@ const IndividualUserProfile: React.FC = () => {
             toggleEditMode={toggleEditMode}
             handleChange={handleChange}
             handleSaveAll={handleSaveAll}
+            showPassword={false}
+            showEditButton={false}
           />
           </SubContainer>
           

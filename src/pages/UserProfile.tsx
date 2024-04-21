@@ -245,6 +245,8 @@ const Profile: React.FC = () => {
             toggleEditMode={toggleEditMode}
             handleChange={handleChange}
             handleSaveAll={handleSaveAll}
+            showPassword={true}
+            showEditButton={true}
           />
           </SubContainer>
           <SubContainer>
