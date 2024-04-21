@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { StreamCraftState } from "../store";
 import { Video } from "../Interface/Video";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 // Define styles for the card
 const CardContainer = styled.div`
@@ -75,13 +76,15 @@ interface Props {
 
 const List: React.FC<Props> = ({ video, onDelete,showDeleteButton }) => {
 
-
+  const navigate = useNavigate(); 
   const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
   
   const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
   const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
-    console.log('type',currentUser.type);
+  console.log('type',currentUser);
+  console.log('currentToken',currentToken);
+
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
@@ -89,19 +92,12 @@ const List: React.FC<Props> = ({ video, onDelete,showDeleteButton }) => {
 
   const handleDelete = () => {
     console.log('deleted successfully',video.video_id);
+    console.log('video',video);
     onDelete(video.video_id);
   };
 
   const [thumbnail, setThumbnail] = useState("");
   
-  // const fetchThumbnail = async () => {
-  //   const res = await axios.get(`${API_BASE}/video/getThumbnail/${video.video_id}`, { headers });
-  //   console.log('photo',res.data);
-  //   setThumbnail(res.data.thumbnailUrl);
-  // };
-
-  // fetchThumbnail();
-
   useEffect(() => {
     const fetchThumbnail = async () => {
       try {
@@ -119,9 +115,13 @@ const List: React.FC<Props> = ({ video, onDelete,showDeleteButton }) => {
       fetchThumbnail();
   }, [API_BASE, currentToken, video.video_id]); 
 
+  const handleClick = () => {
+    navigate(`/video/${video.video_id}`);
+};
+
   return (
-    <CardContainer>
-      <ContentContainer>
+    <CardContainer >
+      <ContentContainer onClick={handleClick}>
         <Thumbnail src={thumbnail} alt="Video Thumbnail" />
         <VideoInfo>
           <Title>{video.title}</Title>

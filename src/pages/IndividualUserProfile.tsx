@@ -12,15 +12,17 @@ import { useSelector } from "react-redux";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;  // Changed from center to stretch to allow children to take full width
   justify-content: space-between;
   color: white;
 `;
 
 const SubContainer = styled.div`
-  align-self: flex-start;
-  padding: 20px;
+  align-self: stretch;  // Ensures it takes the full width available
+  padding: 10px;
+  width: 100%;  // Explicitly set width to 100%
 `;
+
 
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
