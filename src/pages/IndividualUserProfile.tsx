@@ -40,7 +40,7 @@ const IndividualUserProfile: React.FC = () => {
   const { userid, usertype } = useParams<{ userid: string; usertype: string }>();
 
   console.log(userid);
-  console.log(userid);
+  console.log(usertype);
   const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
   const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
@@ -114,7 +114,6 @@ const IndividualUserProfile: React.FC = () => {
       try {
         // const res = await axios.delete(`${API_BASE}/video/${videoId}`, { headers });
         console.log('Deleted video', videoId);
-    
         // if (res.status === 200) {
         //   setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
         // }
@@ -140,13 +139,29 @@ const IndividualUserProfile: React.FC = () => {
           />
           </SubContainer>
           
-          { uploadedvideos.length > 0 && (
-            <SubContainer>
-              <h1>Uploaded Videos</h1>
-              <ListVideos videos={uploadedvideos} onDelete={handleDeleteVideo}
-                         showDeleteButton = {false}/>
-            </SubContainer>
-          )}
+          {usertype === 'uploader' ? (
+                  uploadedvideos.length > 0 ? (
+                    <SubContainer>
+                      <h1>Uploaded Videos</h1>
+                      <ListVideos videos={uploadedvideos} onDelete={async (videoId) => {
+                        try {
+                          await axios.delete(`${API_BASE}/video/${videoId}`, { headers });
+                          setUploadedVideos(current => current.filter(video => video._id !== videoId));
+                        } catch (error) {
+                          console.error('Failed to delete video', error);
+                        }
+                      }} showDeleteButton={false}/>
+                    </SubContainer>
+                  ) : (
+                    <SubContainer>
+                      <h1>No videos uploaded</h1>
+                    </SubContainer>
+                  )
+                ) : (
+                  <SubContainer>
+                    <h1>No videos uploaded</h1>
+                  </SubContainer>
+                )}
 
         </Container>
     );
