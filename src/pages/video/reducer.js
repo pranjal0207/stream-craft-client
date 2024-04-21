@@ -27,11 +27,16 @@ export const videoSlice = createSlice({
     dislike: (state, action) => {
       state.currentVideo.message = action.payload;
     },
-
+    moderate: (state, action) => {
+      state.currentVideo.message.moderate = action.payload;
+    },
+    addComment: (state, action) => {
+      state.currentVideo.message.comments.push(action.payload);
+    },
   },
 });
 
-export const { fetchStart, fetchSuccess, fetchFailure, like, dislike } =
+export const { fetchStart, fetchSuccess, fetchFailure, like, dislike, moderate, addComment } =
   videoSlice.actions;
 
 export default videoSlice.reducer;
