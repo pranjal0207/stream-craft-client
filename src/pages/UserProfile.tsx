@@ -25,7 +25,7 @@ const SubContainer = styled.div`
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 type UserDataType = {
     name: string;
-    username: string;
+    email: string;
     password: string;
 };
 
@@ -36,13 +36,12 @@ type EditModeType = {
 const Profile: React.FC = () => {
 
   // User Details
-    const [user, setUser] = useState<UserDataType>({ name: '', username: '', password: '' });
+    const [user, setUser] = useState<UserDataType>({ name: '', email: '', password: '' });
     const [editMode, setEditMode] = useState<boolean>(false); // Explicit boolean state
-    // const currentUserToken = useSelector((state:UserDataType) => state.authReducer);
     const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
     const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
-    console.log('type',currentUser.type);
+    console.log('type',currentUser.user_id);
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
@@ -51,13 +50,13 @@ const Profile: React.FC = () => {
     useEffect(() => {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`${API_BASE}/user/uploader/${currentUser.user_id}`
+          const response = await axios.get(`${API_BASE}/user/${currentUser.type}/${currentUser.user_id}`
           , { headers });
          
           const newUser: UserDataType = {
             name: response.data.user.firstName + ' ' +response.data.user.lastName,
-            username: response.data.user.email,
-            password: response.data.user.password,
+            email: response.data.user.email,
+            password: "******",
           };
 
           setUser(newUser);
@@ -78,19 +77,24 @@ const Profile: React.FC = () => {
   
     const handleSaveAll = async () => {
       try {
-        // const updateRes = await axios.put(`${API_BASE}/user/update`, user);
-        // console.log('Update successful:', updateRes.data);
+        let body = {
+          "email": user.email,
+          "password": user.password
+        } 
+        
+        const updateRes = await axios.put(`${API_BASE}/user/${currentUser.type}/${currentUser.user_id}`,
+                                        body  ,
+                                       { headers });
         
         alert('Profile updated successfully!');
-        setEditMode(false);  // Exiting edit mode after saving
+        setEditMode(false);  
       } catch (error) {
         console.error('Failed to update profile', error);
         alert('Failed to update profile');
       }
     };
 
-    
-
+  
     // Watched Videos 
     const [watchedvideos, setWatchedVideos] = useState<Video[]>([]);
     const [uploadedvideos, setUploadedVideos] = useState<Video[]>([]);

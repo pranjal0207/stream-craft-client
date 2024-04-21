@@ -26,7 +26,7 @@ const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
 type UserDataType = {
     name: string;
-    username: string;
+    email: string;
     password: string;
 };
 
@@ -40,7 +40,7 @@ const IndividualUserProfile: React.FC = () => {
 
 
   // User Details
-    const [user, setUser] = useState<UserDataType>({ name: '', username: '', password: '' });
+    const [user, setUser] = useState<UserDataType>({ name: '', email: '', password: '' });
     const [editMode, setEditMode] = useState<boolean>(false); // Explicit boolean state
 
     useEffect(() => {

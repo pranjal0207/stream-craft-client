@@ -34,7 +34,7 @@ const TextDisplay = styled.div`
 // Define the shape of the user data as a type to reuse
 type UserDataType = {
   name: string;
-  username: string;
+  email: string;
   password: string;
 };
 
