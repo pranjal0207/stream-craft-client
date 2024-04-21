@@ -36,10 +36,8 @@ export const videoSlice = createSlice({
       state.loading = true;
     },
     fetchSuccess: (state, action) => {
-      console.log({"state" : action.payload})
       state.loading = false;
       state.currentVideo = action.payload;
-      console.log({"state2" : state.currentVideo});
     },
     fetchFailure: (state) => {
       state.loading = false;

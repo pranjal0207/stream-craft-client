@@ -3,7 +3,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {format} from "timeago.js";
-
+import { StreamCraftState } from "../store";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 330px;
@@ -55,11 +56,25 @@ const Info = styled.div`
 
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
-const Card = ({ video }) => {
-  const [uploaderProfile, setUploaderProfile] = useState({});
+const Card = ({ video } : any) => {
+  const [uploaderProfile, setUploaderProfile] = useState({
+    user_id: '',
+    username: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    subscribers: [],
+    likedVideos: [],
+    dislikedVideos: [],
+    uploadedVideos: [],
+    type: ''
+  });
+  
   const [thumbnail, setThumbnail] = useState("");
+  const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+
   const headers = {
-    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
+    'Authorization': currentUserToken,
     'Content-Type': 'application/json'
   };
   useEffect(() => {

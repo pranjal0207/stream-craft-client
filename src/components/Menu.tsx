@@ -7,7 +7,9 @@ import SportsBasketballOutlinedIcon from "@mui/icons-material/SportsBasketballOu
 import MovieOutlinedIcon from "@mui/icons-material/MovieOutlined";
 import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
+import HomeIcon from "@mui/icons-material/Home";
 import { Link } from "react-router-dom";
+
 
 const Container = styled.div`
   flex: 1;
@@ -15,9 +17,18 @@ const Container = styled.div`
   height: 100vh;
   color: ${({ theme }) => theme.text};
   font-size: 14px;
-  position: sticky;
+  position: sticky; // Default position
   top: 0;
+
+  @media (max-width: 680px) {
+    position: static; // Non-sticky for screens less than 680px
+  }
+
+  @media (min-width: 681px) {
+    position: sticky; // Sticky position for screens greater than 680px
+  }
 `;
+
 const Wrapper = styled.div`
   padding: 18px 26px;
 `;
@@ -63,10 +74,12 @@ const Menu = ({ darkMode, setDarkMode }: any) => {
             Stream Craft
           </Logo>
         </Link>
-        <Item>
-          <SubscriptionsOutlinedIcon />
-          Subscriptions
-        </Item>
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <Item>
+            <HomeIcon />
+            Home
+          </Item>
+        </Link>
         <Hr />
         <Title>Categories</Title>
         <Link to="sports" style={{ textDecoration: "none", color: "inherit" }}>

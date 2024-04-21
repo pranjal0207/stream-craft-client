@@ -6,6 +6,7 @@ import { VideoInterface } from "../Interface/VideoInterface";
 import { useSelector } from "react-redux";
 import { StreamCraftState } from "../store";
 const Container = styled.div`
+  margin-top:50px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -25,8 +26,7 @@ const Home = ({type}:any) => {
 
   useEffect(() => {
     const fetchVideos = async () => {
-      // const res = await axios.get(`${API_BASE}/video/${type}/getTopVideos?n=6`, { headers });
-      const api = type? `${API_BASE}/video/getTopVideos?n=6&tagName=${type}` : `${API_BASE}/video/getTopVideos?n=6`
+      const api = type? `${API_BASE}/video/getTopVideos?n=10&tagName=${type}` : `${API_BASE}/video/getTopVideos?n=10`
       const res = await axios.get(api, {headers});
       setVideos(res.data.top_videos);
     };

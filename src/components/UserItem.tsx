@@ -38,9 +38,7 @@ const UserItem: React.FC<UserItemProps> = ({ user_id }) => {
     
     useEffect(() => {
         const fetchUser = async () => {
-            console.log({user_id});
             const user = await client.getUserData(user_id);
-            console.log(user);
             setUser(user);
         }
             
@@ -50,9 +48,9 @@ const UserItem: React.FC<UserItemProps> = ({ user_id }) => {
     return (
         <>
             <div className="userCard">
-                <Link to={""} style={{ textDecoration: "none" }}>
+                <Link to={`/userprofile/${user.type}/${user.user_id}`} style={{ textDecoration: "none" }}>
                     <User>
-                        <Avatar src="user.png" />
+                        <Avatar src="/user.png" />
                         {user.firstName} {user.lastName}
                     </User>
                 </Link>

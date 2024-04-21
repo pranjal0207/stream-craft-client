@@ -4,8 +4,11 @@ import { useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Card from "../components/Card";
 import { VideoInterface } from "../Interface/VideoInterface";
+import { useSelector } from "react-redux";
+import { StreamCraftState } from "../store";
 
 const Container = styled.div`
+  margin-top:50px;
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -15,8 +18,12 @@ const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 const Search = () => {
   const [videos, setVideos] = useState([]);
   const query = useLocation().search;
+
+
+  const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+  
   const headers = {
-    'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
+    'Authorization': currentUserToken,
     'Content-Type': 'application/json'
   };
 
