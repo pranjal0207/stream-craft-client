@@ -93,7 +93,6 @@ const Profile: React.FC = () => {
         alert('Failed to update profile');
       }
     };
-
   
     // Watched Videos 
     const [watchedvideos, setWatchedVideos] = useState<Video[]>([]);
