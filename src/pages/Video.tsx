@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { dislike, fetchSuccess, like, moderate } from '../pages/video/reducer';
+import { setSubscribe } from '../pages/SignIn/reducer';
 import { format } from "timeago.js";
 import { StreamCraftState } from "../store";
 import { UploaderUser } from "../Interface/UploaderUserInterface";
@@ -114,7 +115,7 @@ const Description = styled.p`
 `;
 
 const Flag = styled.button`
-  width: 100px;
+  width: 130px;
   background-color: #cc1a00;
   font-weight: 500;
   color: white;
@@ -136,6 +137,7 @@ const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 const VideoPage = () => {
   const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
   const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+  const currentType = useSelector((state: StreamCraftState) => state.authReducer.type);
   let currentVideo = useSelector((state: StreamCraftState) => state.videoReducer.currentVideo);
 
   const dispatch = useDispatch();
@@ -206,6 +208,18 @@ const VideoPage = () => {
     navigate("/signin");
   }
 
+  const handleSubscription = async() => {
+    const res = await axios.put(`${API_BASE}/user/${uploaderProfile.user_id}/subscribe`, {}, {headers});
+    const response = await axios.get(`${API_BASE}/user/${currentType}/${currentUser.user_id}/`);
+
+    dispatch(setSubscribe({
+      type: currentType,
+      user: response.data.user,
+      token: currentUserToken
+    }));
+
+  }
+
   return (
     <>
     {currentUserToken !== "" ? (<Container>
@@ -214,7 +228,7 @@ const VideoPage = () => {
         <VideoWrapper>
           <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
-        <Title>{currentVideo.message.title}</Title>
+        <Title>{currentVideo.message.title}</Title> 
         <Details>
           <Info>
             {format(currentVideo.message.uploadDate)}
@@ -253,6 +267,9 @@ const VideoPage = () => {
           <Flag onClick={flagVideo}>
             {currentVideo.message.moderated ? "FLAGGED" : "FLAG"}
           </Flag>}
+          <Flag onClick={handleSubscription}>
+            {currentUser.subscriptions?.includes(uploaderProfile.user_id) ? "SUBSCRIBED" : "SUBSCRIBE"}
+          </Flag>
         </Channel>
         <Hr />
         <Comments currentVideo={currentVideo} />

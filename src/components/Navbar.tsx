@@ -74,6 +74,7 @@ const Avatar = styled.img`
   height: 32px;
   border-radius: 50%;
   background-color: #999;
+  cursor: pointer;
 `;
 
 const Navbar = () => {
@@ -103,9 +104,10 @@ const Navbar = () => {
           </Search>
           {currentUser && currentUser.firstName !== "" ? (
             <User>
-              <VideoCallOutlinedIcon onClick={() => navigate(`/video/new_video`)} />
-              <Avatar src="user.png" />
-              {currentUser.firstName}
+              <VideoCallOutlinedIcon style={{ cursor: 'pointer' }} onClick={() => navigate(`/video/new_video`)} />
+
+              <Avatar src="/user.png"  onClick={() => navigate(`/userprofile`)}/>
+              <div style={{ cursor: 'pointer' }} onClick={() => navigate(`/userprofile`)} >{currentUser.firstName}</div>
               <Button onClick={signout}>
                   SIGN OUT
                 </Button>

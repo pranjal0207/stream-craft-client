@@ -15,13 +15,13 @@ interface UploaderState {
   token: string;
 }
 
-interface ModeratoState {
+interface ModeratorState {
   type: "moderator";
   user: ModeratorUser;
   token: string;
 }
 
-export type UserState = ConsumerState | UploaderState | ModeratoState;
+export type UserState = ConsumerState | UploaderState | ModeratorState;
 
 const initialState: UserState = {
   type: "consumer",
@@ -63,9 +63,14 @@ export const authSlice = createSlice({
       };
       state.token = "" ;
       state.type = "consumer";
+    },
+    setSubscribe:(state : any, action: PayloadAction<any>) => {
+      if (action.payload.user) state.user = action.payload.user;
+      if (action.payload.token) state.token = action.payload.token;
+      if (action.payload.type) state.type = action.payload.type;
     }
   },
 });
 
-export const { setLogin, setLogout } = authSlice.actions;
+export const { setLogin, setLogout, setSubscribe } = authSlice.actions;
 export default authSlice.reducer;
