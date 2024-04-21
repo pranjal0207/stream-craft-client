@@ -2,12 +2,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import ProfileDetails from '../components/ProfileDetails';
-import ListVideos from "../components/ListVideos";
-import { Video } from "../Interface/Video";
-import { StreamCraftState } from "../store";
+import ProfileDetails from '../../components/ProfileDetails';
+import ListVideos from "../../components/ListVideos";
+import { Video } from "../../Interface/Video";
+import { StreamCraftState } from "../../store";
 import { useSelector } from "react-redux";
-
+import * as client from "./client";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -40,7 +40,7 @@ const Profile: React.FC = () => {
     const [editMode, setEditMode] = useState<boolean>(false); // Explicit boolean state
     const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
     const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
-
+    console.log('currentToken',currentToken);
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
@@ -131,16 +131,16 @@ const Profile: React.FC = () => {
      }, []);
 
 
-    const handleDeleteVideo = async ({videoId}: any) => {
+    const handleDeleteVideo = async (videoId: any) => {
       try {
-        // const res = await axios.delete(`${API_BASE}/video/${videoId}`, { headers });
+        const res = await axios.delete(`${API_BASE}/video/${videoId}`, { headers });
         console.log('Deleted video', videoId);
     
-        // if (res.status === 200) {
-        // if (currentUser.type === 'uploader') {
-        //   setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
-        // }
-        // }
+        if (res.status === 200) {
+          if (currentUser.type === 'uploader') {
+            setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
+          }
+        }
         
       } catch (error) {
         console.error('Failed to delete video', error);

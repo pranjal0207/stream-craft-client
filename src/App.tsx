@@ -7,7 +7,7 @@ import { darkTheme, lightTheme } from "./utils/Theme";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import VideoPage from "./pages/Video";
-import Profile from "./pages/UserProfile";
+import Profile from "./pages/UserProfile/UserProfile";
 import IndividualUserProfile from "./pages/IndividualUserProfile"
 import AuthenticationPage from './pages/SignIn';
 import SignUp from "./pages/SignUp";
