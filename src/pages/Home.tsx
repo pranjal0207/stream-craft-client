@@ -26,12 +26,12 @@ const Home = ({type}:any) => {
   useEffect(() => {
     const fetchVideos = async () => {
       // const res = await axios.get(`${API_BASE}/video/${type}/getTopVideos?n=6`, { headers });
-      const res = await axios.get(`${API_BASE}/video/getTopVideos?n=6`, { headers });
+      const api = type? `${API_BASE}/video/getTopVideos?n=6&tagName=${type}` : `${API_BASE}/video/getTopVideos?n=6`
+      const res = await axios.get(api, {headers});
       setVideos(res.data.top_videos);
-
     };
     fetchVideos();
-  }, []);
+  }, [type]);
 
   return (
     <Container>
