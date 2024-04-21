@@ -1,19 +1,3 @@
-// import { configureStore } from "@reduxjs/toolkit";
-// import authReducer from '../pages/SignIn/reducer';
-// import { UserState } from "../pages/SignIn/reducer";
-
-// export interface StreamCraftState {
-// 	authReducer: UserState;
-// }
-
-// const store = configureStore({
-// 	reducer: {
-// 		authReducer
-// 	}
-// });
-
-// export default store;
-
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import storage from 'redux-persist/lib/storage'; // uses localStorage under the hood
 import { persistStore, persistReducer } from 'redux-persist';
@@ -48,4 +32,3 @@ const store = configureStore({
 export const persistor = persistStore(store);
 
 export default store;
-	

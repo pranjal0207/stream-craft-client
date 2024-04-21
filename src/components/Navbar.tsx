@@ -80,7 +80,6 @@ const Navbar = () => {
   const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
-  // const currentUser = useSelector((state: any) => state.user);
   const dispatch = useDispatch()
 
   const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);

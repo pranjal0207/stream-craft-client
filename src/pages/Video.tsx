@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Comments from "../components/Comments";
-import ReactPlayer from "react-player";
-
+import Card from "../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { dislike, fetchSuccess, like } from '../pages/video/reducer';
+import { format } from "timeago.js";
+import { StreamCraftState } from "../store";
+import { UploaderUser } from "../Interface/UploaderUserInterface";
 
 const Container = styled.div`
   display: flex;
@@ -15,12 +22,7 @@ const Container = styled.div`
 const Content = styled.div`
   flex: 5;
 `;
-const VideoWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-`;
+const VideoWrapper = styled.div``;
 
 const Title = styled.h1`
   font-size: 18px;
@@ -106,48 +108,111 @@ const Subscribe = styled.button`
   cursor: pointer;
 `;
 
+const VideoFrame = styled.video`
+  max-height: 720px;
+  width: 100%;
+  object-fit: cover;
+`;
+
+const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
+
 const Video = () => {
+  const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
+  const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
+  const currentVideo = useSelector((state: StreamCraftState) => state.videoReducer.currentVideo);
+
+  console.log(currentUserToken);
+  const dispatch = useDispatch();
+
+  const videoId = useLocation().pathname.split("/")[2];
+
+  const [uploaderProfile, setUploaderProfile] = useState<UploaderUser>({
+    user_id: '',
+    username: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    subscribers: [],
+    likedVideos: [],
+    dislikedVideos: [],
+    uploadedVideos: [],
+    type: ''
+  });
+  // const headers = {
+  //   'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
+  //   'Content-Type': 'application/json'
+  // };
+  const headers = {
+    'Authorization': currentUserToken,
+  };
+  console.log({headers});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const videoRes = await axios.get(`${API_BASE}/video/getVideo/${videoId}`, { headers });
+        const res = await axios.get(`${API_BASE}/user/uploader/${videoRes.data.message.uploaderId}`, { headers });
+        setUploaderProfile(res.data.user);
+        dispatch(fetchSuccess(videoRes.data));
+      } catch (err) {}
+    };
+    fetchData();
+  }, [videoId, dispatch]);
+
+  const handleLike = async () => {
+    const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/like`, {}, {headers});
+    dispatch(like(res.data.video));
+  };
+  const handleDislike = async () => {
+    const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/dislike`, {}, {headers});
+    dispatch(dislike(res.data.video));
+  };
+
   return (
     <Container>
+      {currentVideo && 
       <Content>
         <VideoWrapper>
-        <ReactPlayer url={`https://youtu.be/Tn6-PIqc4UM?si=8-oiEUuiBmZuD730`} className="react-player" controls />
+          <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
-        <Title>Test Video</Title>
+        <Title>{currentVideo.message.title}</Title>
         <Details>
-          <Info>5,948,302 views • Apr 14, 2024</Info>
+          <Info>
+            {currentVideo.message.views} views • {format(currentVideo.message.uploadDate)}
+          </Info>
           <Buttons>
-            <Button>
-              <ThumbUpOutlinedIcon /> 123
+            <Button onClick={handleLike}>
+              {currentUser.likedVideos?.includes(currentVideo?.message.video_id) ? (
+                <ThumbUpIcon />
+              ) : (
+                <ThumbUpOutlinedIcon />
+              )}{" "}
+              {currentVideo.message.likes}
             </Button>
-            <Button>
-              <ThumbDownOffAltOutlinedIcon /> Dislike
+
+            <Button onClick={handleDislike}>
+            {currentUser.dislikedVideos?.includes(currentVideo?.message.video_id) ? (
+                <ThumbDownIcon />
+              ) : (
+                <ThumbDownOffAltOutlinedIcon />
+              )}{" "}
+              {currentVideo.message.dislikes}
             </Button>
-            <Button>
-              <ReplyOutlinedIcon /> Share
-            </Button>
+
           </Buttons>
         </Details>
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src="/user.png" />
+            <Image src='user.png' />
             <ChannelDetail>
-              <ChannelName>Test User</ChannelName>
-              <ChannelCounter>200K subscribers</ChannelCounter>
-              <Description>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Doloribus laborum delectus unde quaerat dolore culpa sit aliquam
-                at. Vitae facere ipsum totam ratione exercitationem. Suscipit
-                animi accusantium dolores ipsam ut.
-              </Description>
+            {uploaderProfile && <ChannelName>{uploaderProfile.firstName}</ChannelName>}
+              <Description>{currentVideo.message.description}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe>SUBSCRIBE</Subscribe>
         </Channel>
         <Hr />
-        <Comments/>
-      </Content>
+        <Comments videoId={currentVideo.message.video_id} />
+      </Content>}
     </Container>
   );
 };

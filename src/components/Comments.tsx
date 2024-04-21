@@ -26,7 +26,7 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const Comments = () => {
+const Comments = ({videoId}: any) => {
   return (
     <Container>
       <NewComment>

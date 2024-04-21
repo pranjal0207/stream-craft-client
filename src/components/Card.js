@@ -56,7 +56,8 @@ const Info = styled.div`
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 
 const Card = ({ video }) => {
-  const [profile, setProfile] = useState({});
+  const [uploaderProfile, setUploaderProfile] = useState({});
+  const [thumbnail, setThumbnail] = useState("");
   const headers = {
     'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjRkNTk3M2RjLTdhYjItNDE5Yi04Y2ViLTg4NDU0NDY2NTcxYSIsImlhdCI6MTcxMzM5NzU5Nn0.ALswHlhoSpTYPSFyzjFtVoQWbwGotPBOTkKsqJvkjXo',
     'Content-Type': 'application/json'
@@ -64,17 +65,23 @@ const Card = ({ video }) => {
   useEffect(() => {
     const fetchProfile = async () => {
       const res = await axios.get(`${API_BASE}/user/uploader/${video.uploaderId}`, { headers });
-      setProfile(res.data.user);
+      setUploaderProfile(res.data.user);
     };
     fetchProfile();
-  }, [video.uploaderId]);
+
+    const fetchThumbnail = async () => {
+      const res = await axios.get(`${API_BASE}/video/getThumbnail/${video.video_id}`, { headers });
+      setThumbnail(res.data.thumbnailUrl);
+    };
+    fetchThumbnail();
+
+  }, [video.video_id, video.uploaderId]);
 
   return (
     <Link to={`/video/${video.video_id}`} style={{ textDecoration: "none" }}>
       <Container>
         <Image
-          // need to add image url or thumbnail as an attribute
-          src="https://i9.ytimg.com/vi_webp/k3Vfj-e1Ma4/mqdefault.webp?v=6277c159&sqp=CIjm8JUG&rs=AOn4CLDeKmf_vlMC1q9RBEZu-XQApzm6sA"
+          src={thumbnail}
         />
         <Details>
           <ProfileImage
@@ -82,7 +89,7 @@ const Card = ({ video }) => {
           />
           <Texts>
             <Title>{video.title}</Title>
-            {profile && <ProfileName>{profile.firstName}</ProfileName>}
+            {uploaderProfile && <ProfileName>{uploaderProfile.firstName}</ProfileName>}
             <Info>{video.views} views • {format(video.uploadDate)}</Info>
           </Texts>
         </Details>
