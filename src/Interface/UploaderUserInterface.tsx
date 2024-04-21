@@ -5,6 +5,7 @@ export interface UploaderUser {
     firstName: string;
     lastName: string;
     subscribers: Array<string>;
+    subscriptions?: Array<string>;
     likedVideos : Array<string>;
     dislikedVideos : Array<string>;
     uploadedVideos: Array<string>;

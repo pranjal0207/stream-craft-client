@@ -13,6 +13,8 @@ import AuthenticationPage from './pages/SignIn';
 import SignUp from "./pages/SignUp";
 import Search from "./pages/Search";
 import UploadVideo from "./pages/UploadVideo";
+import SubscribersPage from "./pages/Subscribers";
+import SubscriptionsPage from "./pages/Subscriptions";
 
 
 const Container = styled.div`
@@ -41,7 +43,6 @@ function App() {
             <Wrapper>
               <Routes>
                 <Route path="/">
-
                   <Route index element={<Home />} />
                   <Route path="userprofile" element={<Profile />} />
                   <Route path="userprofile/:id" element={<IndividualUserProfile />} />
@@ -56,6 +57,10 @@ function App() {
                   <Route path="news" element={<Home type="news" />} />
                   <Route path="search" element={<Search />} />
                   <Route path="video/:id" element={<VideoPage />} />
+                  <Route path="userprofile/:user_id/subscribers" element={<SubscribersPage />} />
+                  <Route path="userprofile/subscribers" element={<SubscribersPage />} />
+                  <Route path="userprofile/:user_id/subscriptions" element={<SubscriptionsPage />} />
+                  <Route path="userprofile/subscriptions" element={<SubscriptionsPage />} />
                 </Route>
               </Routes>
             </Wrapper>
