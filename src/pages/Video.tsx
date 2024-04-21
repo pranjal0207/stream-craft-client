@@ -9,7 +9,7 @@ import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { dislike, fetchSuccess, like } from '../pages/video/reducer';
+import { dislike, fetchSuccess, like, moderate } from '../pages/video/reducer';
 import { format } from "timeago.js";
 import { StreamCraftState } from "../store";
 import { UploaderUser } from "../Interface/UploaderUserInterface";
@@ -97,7 +97,8 @@ const Description = styled.p`
   font-size: 14px;
 `;
 
-const Subscribe = styled.button`
+const Flag = styled.button`
+  width: 100px;
   background-color: #cc1a00;
   font-weight: 500;
   color: white;
@@ -121,7 +122,6 @@ const Video = () => {
   const currentUserToken = useSelector((state: StreamCraftState) => state.authReducer.token);
   const currentVideo = useSelector((state: StreamCraftState) => state.videoReducer.currentVideo);
 
-  console.log(currentUserToken);
   const dispatch = useDispatch();
 
   const videoId = useLocation().pathname.split("/")[2];
@@ -145,7 +145,6 @@ const Video = () => {
   const headers = {
     'Authorization': currentUserToken,
   };
-  console.log({headers});
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -167,6 +166,14 @@ const Video = () => {
     dispatch(dislike(res.data.video));
   };
 
+  const flagVideo = async () => {
+    const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/moderate`, {}, {headers});
+    console.log(res.data.message);
+    dispatch(moderate(res.data.message.moderate));
+  };
+
+
+
   return (
     <Container>
       {currentVideo && 
@@ -177,7 +184,7 @@ const Video = () => {
         <Title>{currentVideo.message.title}</Title>
         <Details>
           <Info>
-            {currentVideo.message.views} views • {format(currentVideo.message.uploadDate)}
+            {format(currentVideo.message.uploadDate)}
           </Info>
           <Buttons>
             <Button onClick={handleLike}>
@@ -190,7 +197,7 @@ const Video = () => {
             </Button>
 
             <Button onClick={handleDislike}>
-            {currentUser.dislikedVideos?.includes(currentVideo?.message.video_id) ? (
+              {currentUser.dislikedVideos?.includes(currentVideo?.message.video_id) ? (
                 <ThumbDownIcon />
               ) : (
                 <ThumbDownOffAltOutlinedIcon />
@@ -203,15 +210,19 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src='user.png' />
+            <Image src='/user.png' />
             <ChannelDetail>
             {uploaderProfile && <ChannelName>{uploaderProfile.firstName}</ChannelName>}
               <Description>{currentVideo.message.description}</Description>
             </ChannelDetail>
           </ChannelInfo>
+          {currentUser.type == 'consumer' &&
+          <Flag onClick={flagVideo}>
+            {currentVideo.message.moderated ? "FLAGGED" : "FLAG"}
+          </Flag>}
         </Channel>
         <Hr />
-        <Comments videoId={currentVideo.message.video_id} />
+        <Comments currentVideo={currentVideo} />
       </Content>}
     </Container>
   );

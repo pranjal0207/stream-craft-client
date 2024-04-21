@@ -90,7 +90,7 @@ const Card = ({ video }) => {
           <Texts>
             <Title>{video.title}</Title>
             {uploaderProfile && <ProfileName>{uploaderProfile.firstName}</ProfileName>}
-            <Info>{video.views} views • {format(video.uploadDate)}</Info>
+            <Info>{format(video.uploadDate)}</Info>
           </Texts>
         </Details>
       </Container>

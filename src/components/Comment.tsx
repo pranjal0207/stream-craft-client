@@ -1,5 +1,8 @@
-import React from "react";
+
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { UploaderUser } from "../Interface/UploaderUserInterface";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +20,7 @@ const Details = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  color: ${({ theme }) => theme.text}
+  color: ${({ theme }) => theme.text};
 `;
 const Name = styled.span`
   font-size: 13px;
@@ -35,20 +38,35 @@ const Text = styled.span`
   font-size: 14px;
 `;
 
-const Comment = () => {
+const Comment = ({ comment }: any) => {
+  const [uploaderProfile, setUploaderProfile] = useState<UploaderUser>({
+    user_id: '',
+    username: '',
+    email: '',
+    firstName: '',
+    lastName: '',
+    subscribers: [],
+    likedVideos: [],
+    dislikedVideos: [],
+    uploadedVideos: [],
+    type: ''
+  });
+  useEffect(() => {
+    const fetchComment = async () => {
+      const res = await axios.get(`/users/find/${comment.userId}`);
+      setUploaderProfile(res.data)
+    };
+    fetchComment();
+  }, [comment.userId]);
+
   return (
     <Container>
       <Avatar src="/user.png" />
       <Details>
         <Name>
-          John Doe <Date>1 day ago</Date>
+          {uploaderProfile.firstName}
         </Name>
-        <Text>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Vel, ex
-          laboriosam ipsam aliquam voluptatem perferendis provident modi, sequi
-          tempore reiciendis quod, optio ullam cumque? Quidem numquam sint
-          mollitia totam reiciendis?
-        </Text>
+        <Text>{comment}</Text>
       </Details>
     </Container>
   );
