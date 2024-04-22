@@ -14,6 +14,7 @@ import Search from "./pages/Search";
 import UploadVideo from "./pages/UploadVideo";
 import SubscribersPage from "./pages/Subscribers";
 import SubscriptionsPage from "./pages/Subscriptions";
+import VideoYTPage from "./pages/VideoYT";
 
 const Container = styled.div`
   display: flex;
@@ -69,6 +70,7 @@ function App() {
                   <Route path="news" element={<Home type="news" />} />
                   <Route path="search" element={<Search />} />
                   <Route path="video/:id" element={<VideoPage />} />
+                  <Route path="videoYt/:id" element={<VideoYTPage />} />
                   <Route path="userprofile/:user_id/subscribers" element={<SubscribersPage />} />
                   <Route path="userprofile/subscribers" element={<SubscribersPage />} />
                   <Route path="userprofile/:user_id/subscriptions" element={<SubscriptionsPage />} />
