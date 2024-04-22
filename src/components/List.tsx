@@ -83,7 +83,6 @@ const List: React.FC<Props> = ({ video, onDelete,showDeleteButton }) => {
   const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
 
   console.log('type',currentUser);
-  console.log('currentToken',currentToken);
 
     const headers = {
       'Content-Type': 'application/json',

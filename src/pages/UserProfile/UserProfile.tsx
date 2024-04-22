@@ -11,16 +11,25 @@ import * as client from "./client";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: stretch;  // Changed from center to stretch to allow children to take full width
+  align-items: stretch;
   justify-content: space-between;
   color: white;
+
+  @media (max-width: 768px) {
+    align-items: center;  // Center items on smaller screens
+  }
 `;
 
 const SubContainer = styled.div`
-  align-self: stretch;  // Ensures it takes the full width available
+  align-self: stretch;
   padding: 10px;
-  width: 100%;  // Explicitly set width to 100%
+  width: 100%;
+
+  @media (max-width: 768px) {
+    padding: 5px; // Reduce padding on smaller screens
+  }
 `;
+
 
 const API_BASE = process.env.REACT_APP_BACKEND_BASE_API;
 type UserDataType = {
@@ -40,7 +49,7 @@ const Profile: React.FC = () => {
     const [editMode, setEditMode] = useState<boolean>(false); // Explicit boolean state
     const currentToken = useSelector((state: StreamCraftState) => state.authReducer.token);
     const currentUser = useSelector((state: StreamCraftState) => state.authReducer.user);
-    console.log('currentToken',currentToken);
+    // console.log('currentToken',currentToken);
     const headers = {
       'Content-Type': 'application/json',
       'Authorization': currentToken
@@ -136,11 +145,11 @@ const Profile: React.FC = () => {
         const res = await axios.delete(`${API_BASE}/video/${videoId}`, { headers });
         console.log('Deleted video', videoId);
     
-        if (res.status === 200) {
+        // if (res.status === 200) {
           if (currentUser.type === 'uploader') {
             setUploadedVideos(currentVideos => currentVideos.filter(video => video._id !== videoId));
           }
-        }
+        // }
         
       } catch (error) {
         console.error('Failed to delete video', error);
