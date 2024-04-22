@@ -101,13 +101,7 @@ const ChannelDetail = styled.div`
 
 const ChannelName = styled.span`
   font-weight: 500;
-`;
-
-const ChannelCounter = styled.span`
-  margin-top: 5px;
-  margin-bottom: 20px;
-  color: ${({ theme }) => theme.textSoft};
-  font-size: 12px;
+  cursor: pointer;
 `;
 
 const Description = styled.p`
@@ -235,23 +229,13 @@ const VideoPage = () => {
           </Info>
           <Buttons>
             <Button onClick={handleLike}>
-              {currentUser.likedVideos?.includes(currentVideo?.message.video_id) ? (
-                <ThumbUpIcon />
-              ) : (
-                <ThumbUpOutlinedIcon />
-              )}{" "}
+            <ThumbUpOutlinedIcon />{" "}
               {currentVideo.message.likes}
             </Button>
-
             <Button onClick={handleDislike}>
-              {currentUser.dislikedVideos?.includes(currentVideo?.message.video_id) ? (
-                <ThumbDownIcon />
-              ) : (
-                <ThumbDownOffAltOutlinedIcon />
-              )}{" "}
+            <ThumbDownOffAltOutlinedIcon />{" "}
               {currentVideo.message.dislikes}
             </Button>
-
           </Buttons>
         </Details>
         <Hr />
@@ -259,7 +243,9 @@ const VideoPage = () => {
           <ChannelInfo>
             <Image src='/user.png' />
             <ChannelDetail>
-            {uploaderProfile && <ChannelName>{uploaderProfile.firstName}</ChannelName>}
+            {uploaderProfile && <ChannelName onClick={()=>navigate(`/userprofile/${uploaderProfile.type}/${uploaderProfile.user_id}`)}>
+              {uploaderProfile.firstName}
+              </ChannelName>}
               <Description>{currentVideo.message.description}</Description>
             </ChannelDetail>
           </ChannelInfo>
@@ -279,8 +265,6 @@ const VideoPage = () => {
         <div className='upload-container'>
         <div className="upload-form">
             <h3> Please Sign-In to view this video</h3>
-            {/* <h3> Signed In with email : {currentUser.email}</h3> */}
-            {/* <button type="submit">SIGN IN</button> */}
             <Link to="/signin" style={{ textDecoration: "none" }}>
             <Button2 onClick={signin}>
                 <AccountCircleOutlinedIcon />
