@@ -31,6 +31,7 @@ const UploadVideo = () => {
     const [videoFile, setVideoFile] = useState<File | null>(null);
     const [thumbnail, setThumbnail] = useState<File | null>(null);
     const [errorMessage, setErrorMessage] = useState<string>('');
+    const [videoTag, setVideoTag] = useState<string>('');
 
     const currentUserToken = useSelector((state:StreamCraftState) => state.authReducer.token);
     const currentUserType = useSelector((state: StreamCraftState) => state.authReducer.type);
@@ -53,6 +54,7 @@ const UploadVideo = () => {
             formData.append('files', videoFile);
             formData.append('files', thumbnail);
             formData.append('coordinates', "200,200");
+            formData.append('tagName', videoTag);
 
             const response = await client.uploadVideo(formData, currentUserToken);
             navigate("/");
@@ -115,6 +117,22 @@ const UploadVideo = () => {
                                 required
                             />
                         </div>
+                        <div className="user-type-selector">
+                                    <label htmlFor="userType">User Type:</label>
+                                    <select
+                                        id="videoTag"
+                                        value={videoTag}
+                                        onChange={(e) => setVideoTag(e.target.value)}
+                                        required
+                                    >
+                                        <option value="Sports">Sports</option>
+                                        <option value="Gaming">Gaming</option>
+                                        <option value="Music">Music</option>
+                                        <option value="Music">Movies</option>
+                                        <option value="News">News</option>
+                                    </select>
+                                </div>
+                            <div></div>
                         <button type="submit">Upload Video</button>
                     </form>
                 </div>
