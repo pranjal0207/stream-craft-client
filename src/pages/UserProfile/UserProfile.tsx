@@ -83,7 +83,7 @@ const Profile: React.FC = () => {
           name:
             response.data.user.firstName + " " + response.data.user.lastName,
           email: response.data.user.email,
-          password: "******",
+          password: "",
         };
 
         setUser(newUser);
