@@ -144,7 +144,7 @@ const VideoYTPage = () => {
   return (
     <>
     {currentUserToken !== "" ? (<Container>
-      <iframe width="560" height="315" src={embedUrl} frameBorder="0"
+      <iframe width="1120" height="630" src={embedUrl} frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen></iframe>
     </Container>
