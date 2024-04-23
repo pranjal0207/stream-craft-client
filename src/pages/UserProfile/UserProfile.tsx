@@ -8,6 +8,8 @@ import { Video } from "../../Interface/Video";
 import { StreamCraftState } from "../../store";
 import { useSelector } from "react-redux";
 import * as client from "./client";
+import { useNavigate } from 'react-router-dom'; 
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -34,6 +36,17 @@ type EditModeType = {
 };
 
 const Profile: React.FC = () => {
+
+  const navigate = useNavigate();  
+  const navigateToSubscribers = () => {
+    // Conditionally navigate based on the isUploader flag
+    if (currentUser.type === 'uploader') {
+    navigate('/userprofile/subscribers');
+    }
+    else {
+      navigate('/userprofile/subscriptions');
+    }
+  };
   // User Details
   const [user, setUser] = useState<UserDataType>({
     name: "",
@@ -47,6 +60,11 @@ const Profile: React.FC = () => {
   const currentUser = useSelector(
     (state: StreamCraftState) => state.authReducer.user
   );
+  const [isUploader, setIsUploader] = useState<boolean>(false);
+
+  // if (currentUser.type === 'uploader'){
+  //   setIsUploader(true);
+  // }
   console.log("currentToken", currentToken);
   const headers = {
     "Content-Type": "application/json",
@@ -74,6 +92,9 @@ const Profile: React.FC = () => {
       }
     };
     fetchUserData();
+    if (currentUser.type === 'uploader'){
+    setIsUploader(true);
+  }
   }, []);
 
   const toggleEditMode = () => {
@@ -180,6 +201,8 @@ const Profile: React.FC = () => {
           handleSaveAll={handleSaveAll}
           showPassword={true}
           showEditButton={true}
+          isUploader={isUploader}
+          navigateToSubscribers = {navigateToSubscribers}
         />
       </SubContainer>
 

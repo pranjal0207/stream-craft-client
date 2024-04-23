@@ -24,6 +24,14 @@ const Button = styled.button`
   cursor: pointer;
   font-size: 18px;
   margin-top: 5px;
+  width: 200px;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: start; // Aligns items to the start of the container
+  gap: 10px;             // Adds space between the buttons
+  margin-top: 5px;       // Margin above the container
 `;
 
 const TextDisplay = styled.div`
@@ -46,6 +54,8 @@ type ProfileDetailsProps = {
   handleSaveAll: () => void;
   showPassword: boolean;  
   showEditButton: boolean;  
+  isUploader: boolean;
+  navigateToSubscribers: () => void;
 };
 
 const ProfileDetails: React.FC<ProfileDetailsProps> = ({
@@ -55,7 +65,9 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
   handleChange,
   handleSaveAll,
   showPassword,
-  showEditButton
+  showEditButton,
+  isUploader,
+  navigateToSubscribers
 }) => {
   return (
     <>
@@ -78,6 +90,7 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
           </div>
         )
       ))}
+      <ButtonContainer>
        {showEditButton && (<>
         <Button onClick={toggleEditMode}>{editMode ? "Cancel Edit" : "Edit Profile"}</Button>
         <Form onSubmit={(e) => {
@@ -88,6 +101,8 @@ const ProfileDetails: React.FC<ProfileDetailsProps> = ({
       </Form>
       </>
       )}
+      <Button onClick={navigateToSubscribers}>{isUploader ? "View Subscribers" : "View Subscriptions"}</Button>
+      </ButtonContainer>
     </>
   );
 };
