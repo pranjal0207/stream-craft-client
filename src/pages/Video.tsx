@@ -136,6 +136,8 @@ const VideoPage = () => {
 
   const dispatch = useDispatch();
 
+  const [fetchSuccessV, setFetchSuccessV] = useState(false);
+
   const videoId = useLocation().pathname.split("/")[2];
 
   const [uploaderProfile, setUploaderProfile] = useState<UploaderUser>({
@@ -165,6 +167,11 @@ const VideoPage = () => {
         setUploaderProfile(res.data.user);
 
         dispatch(fetchSuccess(videoRes.data));
+
+        if (videoRes.data.message.video_id && videoRes.data.message.video_id != "") {
+          setFetchSuccessV(true);
+        }
+        
       } catch (err) {}
     };
     fetchData();
@@ -194,8 +201,9 @@ const VideoPage = () => {
 
   const flagVideo = async () => {
     const res = await axios.put(`${API_BASE}/video/${currentVideo.message.video_id}/moderate`, {}, {headers});
+    const videoRes = await axios.get(`${API_BASE}/video/getVideo/${videoId}`, { headers });
 
-    dispatch(moderate(res.data.message));
+    dispatch(moderate(videoRes.data));
   };
 
   const signin = async () => {
@@ -216,66 +224,79 @@ const VideoPage = () => {
 
   return (
     <>
-    {currentUserToken !== "" ? (<Container>
-      {currentVideo && 
-      <Content>
-        <VideoWrapper>
-          <VideoFrame src={currentVideo.videoUrl} controls />
-        </VideoWrapper>
-        <Title>{currentVideo.message.title}</Title> 
-        <Details>
-          <Info>
-            {format(currentVideo.message.uploadDate)}
-          </Info>
-          <Buttons>
-            <Button onClick={handleLike}>
-            <ThumbUpOutlinedIcon />{" "}
-              {currentVideo.message.likes}
-            </Button>
-            <Button onClick={handleDislike}>
-            <ThumbDownOffAltOutlinedIcon />{" "}
-              {currentVideo.message.dislikes}
-            </Button>
-          </Buttons>
-        </Details>
-        <Hr />
-        <Channel>
-          <ChannelInfo>
-            <Image src='/user.png' />
-            <ChannelDetail>
-            {uploaderProfile && <ChannelName onClick={()=>navigate(`/userprofile/${uploaderProfile.type}/${uploaderProfile.user_id}`)}>
-              {uploaderProfile.firstName}
-              </ChannelName>}
-              <Description>{currentVideo.message.description}</Description>
-            </ChannelDetail>
-          </ChannelInfo>
-          {currentUser.type == 'moderator' &&
-          <Flag onClick={flagVideo}>
-            {currentVideo.message.moderated ? "FLAGGED" : "FLAG"}
-          </Flag>}
-          <Flag onClick={handleSubscription}>
-            {currentUser.subscriptions?.includes(uploaderProfile.user_id) ? "SUBSCRIBED" : "SUBSCRIBE"}
-          </Flag>
-        </Channel>
-        <Hr />
-        <Comments currentVideo={currentVideo} />
-      </Content>}
-    </Container>
+      {fetchSuccessV ? (
+        <>
+          {currentUserToken !== "" ? (<Container>
+            {currentVideo && 
+            <Content>
+              <VideoWrapper>
+                <VideoFrame src={currentVideo.videoUrl} controls />
+              </VideoWrapper>
+              <Title>{currentVideo.message.title}</Title> 
+              <Details>
+                <Info>
+                  {format(currentVideo.message.uploadDate)}
+                </Info>
+                <Buttons>
+                  <Button onClick={handleLike}>
+                  <ThumbUpOutlinedIcon />{" "}
+                    {currentVideo.message.likes}
+                  </Button>
+                  <Button onClick={handleDislike}>
+                  <ThumbDownOffAltOutlinedIcon />{" "}
+                    {currentVideo.message.dislikes}
+                  </Button>
+                </Buttons>
+              </Details>
+              <Hr />
+              <Channel>
+                <ChannelInfo>
+                  <Image src='/user.png' />
+                  <ChannelDetail>
+                  {uploaderProfile && <ChannelName onClick={()=>navigate(`/userprofile/${uploaderProfile.type}/${uploaderProfile.user_id}`)}>
+                    {uploaderProfile.firstName}
+                    </ChannelName>}
+                    <Description>{currentVideo.message.description}</Description>
+                  </ChannelDetail>
+                </ChannelInfo>
+                {currentUser.type == 'moderator' &&
+                <Flag onClick={flagVideo}>
+                  {currentVideo.message.moderated ? "FLAGGED" : "FLAG"}
+                </Flag>}
+                <Flag onClick={handleSubscription}>
+                  {currentUser.subscriptions?.includes(uploaderProfile.user_id) ? "SUBSCRIBED" : "SUBSCRIBE"}
+                </Flag>
+              </Channel>
+              <Hr />
+              <Comments currentVideo={currentVideo} />
+            </Content>}
+          </Container>
+            ) : (
+              <div className='upload-container'>
+              <div className="upload-form">
+                  <h3> Please Sign-In to view this video</h3>
+                  <Link to="/signin" style={{ textDecoration: "none" }}>
+                  <Button2 onClick={signin}>
+                      <AccountCircleOutlinedIcon />
+                      SIGN IN
+                  </Button2>
+                  </Link>
+              </div>
+          </div>
+          )}
+        </>
       ) : (
+        <>
         <div className='upload-container'>
-        <div className="upload-form">
-            <h3> Please Sign-In to view this video</h3>
-            <Link to="/signin" style={{ textDecoration: "none" }}>
-            <Button2 onClick={signin}>
-                <AccountCircleOutlinedIcon />
-                SIGN IN
-            </Button2>
-            </Link>
-        </div>
-    </div>
-    )}
+              <div className="upload-form">
+                  <h3> Video Unavailable! </h3>
+              </div>
+          </div>
+        </>
+      )}
     </>
   );
 };
 
 export default VideoPage;
+
