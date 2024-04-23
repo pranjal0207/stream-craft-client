@@ -50,7 +50,7 @@ export const videoSlice = createSlice({
       state.currentVideo = action.payload;
     },
     moderate: (state, action) => {
-      state.currentVideo.message.moderated = action.payload;
+      state.currentVideo.message.moderated = action.payload.message.moderated;
     },
     addComment: (state, action) => {
       state.currentVideo.message.comments.push(action.payload);
